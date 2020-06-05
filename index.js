@@ -1,3 +1,4 @@
+const Display = require("./src/display.js");
 const chalk = require("chalk");
 const readline = require("readline-sync");
 const fetch = require("node-fetch");
@@ -7,30 +8,45 @@ const errMessage = "sorry grandfather doesn't want to give advice right now";
 console.clear();
 console.log("hello there");
 
-console.log("what's your name?");
+// console.log("what's your name?");
 
-const name = readline.question("> ");
+// const name = readline.question("> ");
 
-console.clear();
+// console.clear();
 
-const wantAdvice = readline.keyInYN([[`hi ${name}, would you like some grandfather advice?`]]);
+// const wantAdvice = readline.keyInYN([[`hi ${name}, would you like some grandfather advice?`]]);
 
-if (wantAdvice === false) {
-  console.log("ok have a nice day :)");
-  process.exit();
-}
+// if (wantAdvice === false) {
 
+// }
+let running = true;
 const getAdvice = async () => {
-  try {
-    const response = await fetch("https://api.adviceslip.com/advice");
-    if (!response.ok) {
-      throw new Error(errMessage);
+  while (running) {
+    const user = Display.option();
+    const choice = Display.menu();
+
+    switch (choice) {
+      case "1":
+        try {
+          const response = await fetch("https://api.adviceslip.com/advice");
+          if (!response.ok) {
+            throw new Error(errMessage);
+          }
+          const data = await response.json();
+          const result = data.slip.advice;
+          colorPick(result.replace(/\./, "!"));
+          break;
+        } catch (err) {
+          console.log(errMessage);
+          running = false;
+        }
+
+      case "2":
+        running = false;
+        console.log("ok have a nice day :)");
+        process.exit();
     }
-    const data = await response.json();
-    const result = data.slip.advice;
-    colorPick(result.replace(/\./, "!"));
-  } catch (err) {
-    console.log(errMessage);
+    break;
   }
 };
 
