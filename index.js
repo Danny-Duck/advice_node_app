@@ -1,5 +1,4 @@
 const Display = require("./src/display.js");
-const chalk = require("chalk");
 const readline = require("readline-sync");
 const fetch = require("node-fetch");
 
@@ -23,7 +22,7 @@ const getAdvice = async () => {
           }
           const data = await response.json();
           const result = data.slip.advice;
-          colorPick(result.replace(/\./, "!"));
+          Display.colorPick(result.replace(/\./, "!"), colors);
           running = false;
           break;
         } catch (err) {
@@ -42,10 +41,5 @@ const getAdvice = async () => {
   }
 };
 
-const colorPick = (result) => {
-  console.log("whats your favorite color?");
-  const index = readline.keyInSelect(colors, "choose the color number");
-  console.log(`grandfather says "${chalk[colors[index]](result)}"`);
-};
 
 getAdvice();
