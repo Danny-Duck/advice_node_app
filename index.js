@@ -2,14 +2,16 @@ const chalk = require("chalk");
 const readline = require("readline-sync");
 const fetch = require("node-fetch");
 
-const p = (string) => {
-  console.log(string);
-};
+const colors = ['red', 'blue', 'green', 'magenta']
+
+// const p = (string) => {
+//   console.log(string);
+// };
 
 console.clear();
-p("hello there");
+console.log("hello there");
 
-p("what's your name?");
+console.log("what's your name?");
 
 const name = readline.question("> ");
 
@@ -22,17 +24,19 @@ if (wantAdvice === false) {
   process.exit();
 }
 
-p("youre in luck !");
+console.log("youre in luck !");
 
-const advice = new Promise((resolve, reject) => {
   fetch("https://api.adviceslip.com/advice")
     .then((response) => response.json())
-    .then((data) => p(data.slip.advice))
-    .catch((err) => p("sorry grandfather doesn't want to give advice right now"));
-});
+    .then((data) => {
 
-p("whats your favorite color?");
-// color logic
+     const result = data.slip.advice
+     console.log("whats your favorite color?");
+     const index = readline.keyInSelect(colors, 'Choose the color number');  
+     console.log(chalk[colors[index]](result))
+     })
+
+    .catch((err) => console.log("sorry grandfather doesn't want to give advice right now"));
 
 
 // if promise works, print advice in favorite color
