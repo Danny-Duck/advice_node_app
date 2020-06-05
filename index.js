@@ -25,19 +25,23 @@ if (wantAdvice === false) {
 }
 
 console.log("youre in luck !");
+const getAdvice = async () => {
+  try {
+    const response = await fetch("https://api.adviceslip.com/advice")
+    if (!response.ok){
+      throw new Error('Error with response')
+    }
+    const data = await response.json()
+    const result = data.slip.advice
+    console.log("whats your favorite color?");
+    const index = readline.keyInSelect(colors, 'Choose the color number');  
+    console.log(chalk[colors[index]](result))
+  }catch(err){
+    console.log("sorry grandfather doesn't want to give advice right now");
+  }
+}
 
-  fetch("https://api.adviceslip.com/advice")
-    .then((response) => response.json())
-    .then((data) => {
-
-     const result = data.slip.advice
-     console.log("whats your favorite color?");
-     const index = readline.keyInSelect(colors, 'Choose the color number');  
-     console.log(chalk[colors[index]](result))
-     })
-
-    .catch((err) => console.log("sorry grandfather doesn't want to give advice right now"));
-
+getAdvice()
 
 // if promise works, print advice in favorite color
 // if not, say sorry pal grandfather says no
